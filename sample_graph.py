@@ -1,4 +1,3 @@
-from turtle import color
 from pyvis.network import Network
 
 net = Network(directed=True)

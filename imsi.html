@@ -1,0 +1,108 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vis-network@latest/styles/vis-network.css" type="text/css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@latest/dist/vis-network.min.js"> </script>
+<center>
+<h1>IMSI ALARM CHANGED</h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 100%;
+            height: 100%;
+            background-color: #ffffff;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"color": "green", "id": "START", "label": "Start", "physics": false, "shape": "ellipse"}, {"id": "IMSI_CHANGED_ALARM", "label": "IMSI change alarm triggered", "physics": false, "shape": "diamond"}, {"id": "IS_IMSI_CHANGED", "label": "IMSI change for same MSISDN Observed", "physics": false, "shape": "diamond"}, {"id": "YES_IMSI_CHANGED", "label": "Check and confirm with BSS whether SIM has been changed for the user and get UE info updated in VIP Enrichment", "physics": false, "shape": "box"}, {"id": "NO_IMSI_NOT_CHANGED", "label": "IMEI / device Changed for the user", "physics": false, "shape": "diamond"}, {"id": "YES_IMEI_CHANGED", "label": "Get UE info updated in the VIP Enrichment", "physics": false, "shape": "box"}, {"id": "NO_IMEI_NOT_CHANGED", "label": "Check with Radcom for alarm trigger RCA", "physics": false, "shape": "box"}]);
+        edges = new vis.DataSet([{"arrows": "to", "from": "START", "label": "For IMSI / IMEI Change Alarm", "to": "IMSI_CHANGED_ALARM"}, {"arrows": "to", "from": "IMSI_CHANGED_ALARM", "to": "IS_IMSI_CHANGED"}, {"arrows": "to", "from": "IS_IMSI_CHANGED", "label": "Yes", "to": "YES_IMSI_CHANGED"}, {"arrows": "to", "from": "IS_IMSI_CHANGED", "label": "No", "to": "NO_IMSI_NOT_CHANGED"}, {"arrows": "to", "from": "NO_IMSI_NOT_CHANGED", "label": "Yes", "to": "YES_IMEI_CHANGED"}, {"arrows": "to", "from": "NO_IMSI_NOT_CHANGED", "label": "No", "to": "NO_IMEI_NOT_CHANGED"}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>
